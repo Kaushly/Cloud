@@ -12,6 +12,8 @@ import io.netty.handler.codec.string.StringEncoder;
 
 public class NettyServer {
 
+    public static final int PORT = 8189;
+
 //    private UserPool users = new UserPool();
 
     public NettyServer() {
@@ -33,7 +35,7 @@ public class NettyServer {
                             );
                         }
                     });
-            ChannelFuture future = bootstrap.bind(8189).sync();
+            ChannelFuture future = bootstrap.bind(PORT).sync();
             System.out.println("Server started");
             future.channel().closeFuture().sync();
         } catch (Exception e) {
@@ -42,7 +44,6 @@ public class NettyServer {
             auth.shutdownGracefully();
             worker.shutdownGracefully();
         }
-
     }
 
     public static void main(String[] args) {

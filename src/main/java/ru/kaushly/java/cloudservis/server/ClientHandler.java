@@ -2,7 +2,6 @@ package ru.kaushly.java.cloudservis.server;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class ClientHandler extends SimpleChannelInboundHandler<String> {
@@ -32,7 +31,4 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("client disconnected");
     }
-
-
-
 }

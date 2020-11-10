@@ -9,11 +9,11 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="ru.kaushly.java.cloudservis.auth.Registration">
 
-    <Text text="Введите логин: ">
+    <Text text="Придумайте логин: ">
         <VBox.margin>
             <Insets bottom="5.0" top="5.0" />
         </VBox.margin></Text>
-    <TextField accessibleRole="TEXT">
+    <TextField fx:id="addLogin" accessibleRole="TEXT">
         <VBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </VBox.margin></TextField>
@@ -21,7 +21,7 @@
         <VBox.margin>
             <Insets bottom="5.0" top="5.0" />
         </VBox.margin></Text>
-    <TextField accessibleRole="PASSWORD_FIELD">
+    <TextField fx:id="addPassword" accessibleRole="PASSWORD_FIELD">
         <VBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </VBox.margin></TextField>
