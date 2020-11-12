@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ru.kaushly.java.cloudservis.server.AuthService;
 
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class Authorization implements Initializable {
     TextField password;
 
     public void btnEnterCloudAction(ActionEvent actionEvent) throws IOException {
+        AuthService.checkAuthorization(login.getText(), password.getText());
         //todo проверка в БД
         Stage stage = (Stage) open.getScene().getWindow();
         stage.close();

@@ -21,13 +21,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 
-public class Registration implements Initializable, AuthService {
-
-    private Connection connection;
-
-    public Registration(Connection connection) {
-        this.connection = connection;
-    }
+public class Registration implements Initializable {
 
     @FXML
     Button enter;
@@ -39,8 +33,8 @@ public class Registration implements Initializable, AuthService {
     TextField addPassword;
 
     public void btnEnterCloudAction(ActionEvent actionEvent) throws IOException {
+        AuthService.tryRegister(addLogin.getText(), addPassword.getText());
         // todo проверка на уникальность и добавление в БД
-        findRecord(addLogin.getText(), addPassword.getText());
         Stage stage = (Stage) enter.getScene().getWindow();
         stage.close();
         Parent second = FXMLLoader.load(getClass().getResource("/main.fxml"));
@@ -56,25 +50,5 @@ public class Registration implements Initializable, AuthService {
 
     }
 
-    @Override
-    public Record findRecord(String login, String password) {
-        String sql = "INSERT INTO [USERS] ([LOGIN], [PASSWORD]) VALUES where login = ? and password = ?";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, login);
-            statement.setString(2, password);
-            statement.execute();
-
-            ResultSet resultSet = statement.getResultSet();
-
-            if (resultSet.first()){
-                String name = resultSet.getString(2);
-                return new AuthService.Record(login, password);
-            }
-
-        } catch (SQLException sqlException) {
-            throw new RuntimeException("Не удалось прочитать запись о пользователе из БД!", sqlException);
-        }
-        return null;
-    }
 }

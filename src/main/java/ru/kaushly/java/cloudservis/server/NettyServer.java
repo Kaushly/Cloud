@@ -14,13 +14,13 @@ public class NettyServer {
 
     public static final int PORT = 8189;
 
-//    private UserPool users = new UserPool();
-
     public NettyServer() {
+        AuthService.connect();
         EventLoopGroup auth = new NioEventLoopGroup(1);
         EventLoopGroup worker = new NioEventLoopGroup();
 
         try {
+            AuthService.connect();
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(auth, worker)
                     .channel(NioServerSocketChannel.class)
@@ -31,7 +31,6 @@ public class NettyServer {
                                     new StringDecoder(),
                                     new StringEncoder(),
                                     new ClientHandler()
-//                                    new ClientHandler(UserPool users)
                             );
                         }
                     });
@@ -43,6 +42,7 @@ public class NettyServer {
         } finally {
             auth.shutdownGracefully();
             worker.shutdownGracefully();
+
         }
     }
 

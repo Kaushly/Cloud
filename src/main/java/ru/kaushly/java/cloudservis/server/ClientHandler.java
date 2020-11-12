@@ -6,14 +6,10 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class ClientHandler extends SimpleChannelInboundHandler<String> {
 
-//    private UserPool users;
 
     public static final ConcurrentLinkedDeque<ChannelHandlerContext> channels =
             new ConcurrentLinkedDeque<>();
 
-//    public ClientHandler(UserPool users) {
-//        this.users = users;
-//    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -22,13 +18,15 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
     }
 
     @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("client disconnected");
+    }
+
+
+    @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
         System.out.println("Message from client: " + s);
         channels.forEach(c -> c.writeAndFlush(s));
     }
 
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("client disconnected");
-    }
 }

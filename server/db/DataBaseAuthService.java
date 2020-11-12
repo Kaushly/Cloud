@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class DataBaseAuthService implements AuthService{
+public class DataBaseAuthService implements AuthService {
     private Connection connection;
 
     public DataBaseAuthService(Connection connection) {

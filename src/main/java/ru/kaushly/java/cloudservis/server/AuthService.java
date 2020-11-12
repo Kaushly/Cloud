@@ -1,47 +1,69 @@
 package ru.kaushly.java.cloudservis.server;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.sql.*;
 
-public interface AuthService {
-    Record findRecord(String login, String password);
+public class AuthService {
+    private static Connection connection;
+    private static Statement statement;
+    private static final String DATABASE_NAME = "/users";
+    private static final String URL = "jdbc:postgresql://localhost:5432/UsersOfCloud" + DATABASE_NAME;
+    private static final String DB_USER ="postgres";
+    private static final String DB_PASS ="postgres";
 
-    class Record {
-        private UUID id;
-        private String login;
-        private String password;
 
-        public Record(String login, String password) {
-            id = new UUID(0, 100000);
-            this.login = login;
-            this.password = password;
+    public static void connect() {
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+            statement = connection.createStatement();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
-        public UUID getId() {
-            return id;
+    public static String checkAuthorization(String login, String password) {
+        String sql = String.format("SELECT id FROM users WHERE name = '%s' AND password = '%s'", login, password);
+        try {
+            ResultSet rs = statement.executeQuery(sql);
+            if (rs.next()) {
+                return rs.getString("username_fld");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
 
-        public String getLogin() {
+    public static String checkLogin(String login) {
+        String sql = String.format("SELECT name FROM users WHERE name = '%s'", login);
+        try {
+            ResultSet rs = statement.executeQuery(sql);
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String tryRegister(String login, String password) {
+        String sql = String.format("INSERT INTO users(name, password) VALUES('%s','%s')", login, password);
+        try {
+            statement.executeQuery(sql);
             return login;
-        }
 
-        public String getPassword() {
-            return password;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Record record = (Record) o;
-            return id == record.id &&
-                    login.equals(record.login) &&
-                    password.equals(record.password);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id, login, password);
+    public static void disconnect() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
