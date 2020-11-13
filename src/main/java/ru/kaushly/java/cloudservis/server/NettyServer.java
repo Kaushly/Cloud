@@ -9,16 +9,19 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import ru.kaushly.java.cloudservis.server.handlers.ChatMessageHandler;
 
 public class NettyServer {
 
-//    private UserPool users = new UserPool();
+    public static final int PORT = 8189;
 
     public NettyServer() {
+        AuthService.connect();
         EventLoopGroup auth = new NioEventLoopGroup(1);
         EventLoopGroup worker = new NioEventLoopGroup();
 
         try {
+            AuthService.connect();
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(auth, worker)
                     .channel(NioServerSocketChannel.class)
@@ -29,11 +32,11 @@ public class NettyServer {
                                     new StringDecoder(),
                                     new StringEncoder(),
                                     new ClientHandler()
-//                                    new ClientHandler(UserPool users)
+//                                    new ChatMessageHandler()
                             );
                         }
                     });
-            ChannelFuture future = bootstrap.bind(8189).sync();
+            ChannelFuture future = bootstrap.bind(PORT).sync();
             System.out.println("Server started");
             future.channel().closeFuture().sync();
         } catch (Exception e) {
@@ -41,8 +44,8 @@ public class NettyServer {
         } finally {
             auth.shutdownGracefully();
             worker.shutdownGracefully();
-        }
 
+        }
     }
 
     public static void main(String[] args) {
